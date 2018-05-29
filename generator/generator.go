@@ -15,13 +15,13 @@ import (
 
 const maxDieRolls = 5
 
-// WordCount is the required number of dicewords in a secure passphrase
+// DefaultWordCount is the required number of dicewords in a secure passphrase
 // Date Established: March 5, 2014
 // Ref: https://diceware.blogspot.com/2014/03/time-to-add-word.html
-const WordCount = 6
+const DefaultWordCount = 6
 
-// Separator is the recommended word separator for dice words
-const Separator = " "
+// DefaultSeparator is the recommended word separator for dice words
+const DefaultSeparator = " "
 
 // charCount is the required number of characters in a diceware passphrase
 // Ref: http://world.std.com/~reinhold/dicewarefaq.html#14characters
@@ -36,7 +36,7 @@ var meetsCharReq = func(pass string) bool { return strings.Count(pass, "")-1 > c
 // a randomly generated id, or when it is unable to get the required entropy from
 // the system's random number generator.
 func Passphrase(path string) (string, error) {
-	return PassphraseWith(path, Separator, WordCount)
+	return PassphraseWith(path, DefaultSeparator, DefaultWordCount)
 }
 
 // PassphraseWith generates a diceware passphrase according to a supplied
@@ -52,7 +52,7 @@ func Passphrase(path string) (string, error) {
 // * An empty string separator
 // * Separators that appear as a tword in the wordlist
 // * Separators that are alphanumeric
-// Separator constraints are based on the collision issues described here:
+// DefaultSeparator constraints are based on the collision issues described here:
 // http://world.std.com/~reinhold/dicewarefaq.html#spaces
 func PassphraseWith(path, separator string, wordCount int) (string, error) {
 	bytes, err := ioutil.ReadFile(path)
@@ -91,8 +91,8 @@ func checkParams(path, separator, wordlist string, wc int) error {
 		return fmt.Errorf("separator %s cannot be a word in the wordlist %s", separator, path)
 	case alum.MatchString(separator):
 		return fmt.Errorf("separator %s cannot contain alphanumeric characters", separator)
-	case wc < WordCount:
-		return fmt.Errorf("word count requested is %v; must be over %v words", wc, WordCount)
+	case wc < DefaultWordCount:
+		return fmt.Errorf("word count requested is %v; must be over %v words", wc, DefaultWordCount)
 	default:
 		return nil
 	}

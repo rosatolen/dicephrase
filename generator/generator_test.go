@@ -42,10 +42,10 @@ func (s *GoDicephraseSuite) Test_eachPassphraseIsDifferent(c *C) {
 	c.Assert(passphrase1, Not(Equals), passphrase2)
 }
 
-func (s *GoDicephraseSuite) Test_defaultPassphraseHasRecommendedWordCount(c *C) {
+func (s *GoDicephraseSuite) Test_defaultPassphraseHasRecommendedDefaultWordCount(c *C) {
 	passphrase, _ := Passphrase(wordlist)
 
-	c.Assert(strings.Split(passphrase, " "), HasLen, WordCount)
+	c.Assert(strings.Split(passphrase, " "), HasLen, DefaultWordCount)
 }
 
 func (s *GoDicephraseSuite) Test_createPassphraseWith8Words(c *C) {
@@ -60,14 +60,14 @@ func (s *GoDicephraseSuite) Test_createPassphraseWithUnderscoreSeparation(c *C) 
 	c.Assert(strings.Split(passphrase, "_"), HasLen, testCount)
 }
 
-func (s *GoDicephraseSuite) Test_cannotCreateDicephraseWithInsecureWordCount(c *C) {
-	lowWordCount := 4
-	passphrase, err := PassphraseWith(wordlist, " ", lowWordCount)
+func (s *GoDicephraseSuite) Test_cannotCreateDicephraseWithInsecureDefaultWordCount(c *C) {
+	lowDefaultWordCount := 4
+	passphrase, err := PassphraseWith(wordlist, " ", lowDefaultWordCount)
 	c.Assert(passphrase, Equals, "")
 	c.Assert(err, ErrorMatches, "diceware: cannot create passphrase: word count requested is 4; must be over 6 words")
 }
 
-func (s *GoDicephraseSuite) Test_cannotCreateDicephraseWithoutSeparator(c *C) {
+func (s *GoDicephraseSuite) Test_cannotCreateDicephraseWithoutDefaultSeparator(c *C) {
 	passphrase, err := PassphraseWith(wordlist, "", testCount)
 	c.Assert(passphrase, Equals, "")
 	c.Assert(err, ErrorMatches, "diceware: cannot create passphrase: separator cannot be an empty string")
@@ -93,21 +93,21 @@ func (s *GoDicephraseSuite) Test_generatesErrorForBadWordlistPath(c *C) {
 }
 
 func (s *GoDicephraseSuite) Test_generatesErrorWhenItCannotFindWordForAnID(c *C) {
-	passphrase, err := PassphraseWith("../wordlists/empty-wordlist", Separator, testCount)
+	passphrase, err := PassphraseWith("../wordlists/empty-wordlist", DefaultSeparator, testCount)
 	c.Assert(passphrase, Equals, "")
 	c.Assert(err, ErrorMatches, "diceware: cannot choose random word with wordlist ../wordlists/empty-wordlist: cannot find word with the ID:.*")
 }
 
 func (s *GoDicephraseSuite) Test_newPasswordGeneratedWhenCharReqNotMet(c *C) {
 	badPass := "aa bb cc dd ee ff"
-	passphrase, err := checkCharReq(badPass, wordlist, Separator, testCount)
+	passphrase, err := checkCharReq(badPass, wordlist, DefaultSeparator, testCount)
 	c.Assert(err, Equals, nil)
 	c.Assert(passphrase, Not(Equals), badPass)
 }
 
 func (s *GoDicephraseSuite) Test_currentPasswordIsKeptWhenCharReqIsMet(c *C) {
 	goodPass := "dow kraft freon plat fear dr"
-	passphrase, err := checkCharReq(goodPass, wordlist, Separator, testCount)
+	passphrase, err := checkCharReq(goodPass, wordlist, DefaultSeparator, testCount)
 	c.Assert(err, Equals, nil)
 	c.Assert(passphrase, Equals, goodPass)
 }

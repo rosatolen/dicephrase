@@ -11,13 +11,13 @@ import (
 
 func main() {
 	var wc int
-	defaultWc := gen.WordCount
-	wcUsage := fmt.Sprintf("Specify the number of words you want. Must be greater than %v", gen.WordCount)
+	defaultWc := gen.DefaultWordCount
+	wcUsage := fmt.Sprintf("Specify the number of words you want. Must be greater than %v", defaultWc)
 	flag.IntVar(&wc, "words", defaultWc, wcUsage)
 	flag.IntVar(&wc, "w", defaultWc, "(words shorthand) "+wcUsage)
 
 	var sep string
-	defaultSep := gen.Separator
+	defaultSep := gen.DefaultSeparator
 	sepUsage := "Specify the type of separator you want between the words. Cannot be alphanumeric and cannot exist as a word in the wordlist"
 	flag.StringVar(&sep, "sep", defaultSep, sepUsage)
 	flag.StringVar(&sep, "s", defaultSep, "(sep shorthand) "+sepUsage)
